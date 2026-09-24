@@ -4,7 +4,10 @@ import type { UserRole } from '../store/authSlice'
 export type AppRoute = { path: string; element: ReactNode; roles: UserRole[] }
 
 const everyone: UserRole[] = ['super_admin', 'principal', 'teacher', 'student', 'parent']
+
+const leadership: UserRole[] = ['super_admin', 'principal']
 const staff: UserRole[] = ['super_admin', 'principal', 'teacher']
+
 
 
 
@@ -39,6 +42,11 @@ const FeeManagementPage = lazyPage(() => import('../features/finance/FeeManageme
 const SalaryPayrollPage = lazyPage(() => import('../features/finance/SalaryPayrollPage'), 'SalaryPayrollPage')
 const ExpenseTrackerPage = lazyPage(() => import('../features/finance/ExpenseTrackerPage'), 'ExpenseTrackerPage')
 const ScholarshipManagementPage = lazyPage(() => import('../features/finance/ScholarshipManagementPage'), 'ScholarshipManagementPage')
+/* Phase 5 — communication */
+const AnnouncementManagementPage = lazyPage(() => import('../features/communication/AnnouncementManagementPage'), 'AnnouncementManagementPage')
+const EmailSmsTemplatesPage = lazyPage(() => import('../features/communication/EmailSmsTemplatesPage'), 'EmailSmsTemplatesPage')
+const InAppChatPage = lazyPage(() => import('../features/communication/InAppChatPage'), 'InAppChatPage')
+const NotificationEnginePage = lazyPage(() => import('../features/communication/NotificationEnginePage'), 'NotificationEnginePage')
 
 export const appRoutes: AppRoute[] = [
   { path: '/', element: <Phase0ShowcasePage />, roles: everyone },
@@ -65,4 +73,8 @@ export const appRoutes: AppRoute[] = [
   { path: '/finance/payroll', element: <SalaryPayrollPage />, roles: staff },
   { path: '/finance/expenses', element: <ExpenseTrackerPage />, roles: leadership },
   { path: '/finance/scholarships', element: <ScholarshipManagementPage />, roles: everyone },
+  { path: '/communication/announcements', element: <AnnouncementManagementPage />, roles: everyone },
+  { path: '/communication/templates', element: <EmailSmsTemplatesPage />, roles: staff },
+  { path: '/communication/chat', element: <InAppChatPage />, roles: everyone },
+  { path: '/communication/notifications', element: <NotificationEnginePage />, roles: staff },
 ]
