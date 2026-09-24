@@ -15,7 +15,6 @@ export function TeacherWorkspacePage() {
   const user = useAppSelector((state) => state.auth.user)
   const teacherId = user?.id.startsWith('tch-') ? user.id : 'tch-01'
   const [done, setDone] = useState<Record<string, boolean>>({})
-  const [priority] = useState('')
   const toast = useToast()
   const query = useMockQuery(['workspace', teacherId], () => mockApi.teacherWorkspace(teacherId))
   const header = <PageHeader eyebrow="Operations · workspace" title="Teacher workspace" subtitle="Your teaching schedule, grading queue, assignments and student questions." />
@@ -23,7 +22,7 @@ export function TeacherWorkspacePage() {
   if (query.isLoading) return <div className="ec-page">{header}<SkeletonCards count={4} /><div style={{ height: 16 }} /><SkeletonCards count={1} height={320} /></div>
   if (query.isError || !data) return <div className="ec-page">{header}<ErrorState onRetry={() => query.refetch()} /></div>
   const isDone = (task: WorkspaceTask) => done[task.id] ?? task.done
-  const tasks = data.tasks.filter((task) => !priority || task.priority === priority)
+  const tasks = data.tasks
   const columns: Array<DataTableColumn<WorkspaceTask>> = [
     { key: 'task', header: 'Task', render: (row) => <div className="ec-table__primary"><strong>{row.title}</strong><span>{row.module}</span></div>, searchValue: (row) => `${row.title} ${row.module}` },
     { key: 'priority', header: 'Priority', render: (row) => <Badge tone={row.priority === 'high' ? 'danger' : row.priority === 'normal' ? 'info' : 'neutral'}>{row.priority}</Badge> },

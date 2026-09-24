@@ -5,7 +5,7 @@ export type AppRoute = { path: string; element: ReactNode; roles: UserRole[] }
 
 const everyone: UserRole[] = ['super_admin', 'principal', 'teacher', 'student', 'parent']
 const staff: UserRole[] = ['super_admin', 'principal', 'teacher']
-const leadership: UserRole[] = ['super_admin', 'principal']
+
 
 
 
@@ -34,6 +34,11 @@ const TransportPage = lazyPage(() => import('../features/operations/TransportPag
 const HostelPage = lazyPage(() => import('../features/operations/HostelPage'), 'HostelPage')
 const LibraryOperationsPage = lazyPage(() => import('../features/operations/LibraryOperationsPage'), 'LibraryOperationsPage')
 const InventoryPage = lazyPage(() => import('../features/operations/InventoryPage'), 'InventoryPage')
+/* Phase 4 — finance */
+const FeeManagementPage = lazyPage(() => import('../features/finance/FeeManagementPage'), 'FeeManagementPage')
+const SalaryPayrollPage = lazyPage(() => import('../features/finance/SalaryPayrollPage'), 'SalaryPayrollPage')
+const ExpenseTrackerPage = lazyPage(() => import('../features/finance/ExpenseTrackerPage'), 'ExpenseTrackerPage')
+const ScholarshipManagementPage = lazyPage(() => import('../features/finance/ScholarshipManagementPage'), 'ScholarshipManagementPage')
 
 export const appRoutes: AppRoute[] = [
   { path: '/', element: <Phase0ShowcasePage />, roles: everyone },
@@ -56,4 +61,8 @@ export const appRoutes: AppRoute[] = [
   { path: '/academics/library', element: <ELibraryPage />, roles: everyone },
   { path: '/academics/live-classes', element: <LiveClassesPage />, roles: everyone },
   { path: '/academics/doubts', element: <DoubtForumPage />, roles: everyone },
+  { path: '/finance/fees', element: <FeeManagementPage />, roles: everyone },
+  { path: '/finance/payroll', element: <SalaryPayrollPage />, roles: staff },
+  { path: '/finance/expenses', element: <ExpenseTrackerPage />, roles: leadership },
+  { path: '/finance/scholarships', element: <ScholarshipManagementPage />, roles: everyone },
 ]
