@@ -1,0 +1,31 @@
+services:
+  mongo:
+    image: mongo:8
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - educore-mongo:/data/db
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+  api:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      - mongo
+      - redis
+    ports:
+      - "4000:4000"
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+      CLIENT_URL: http://localhost:5173
+      MONGODB_URI: mongodb://mongo:27017/educore_os
+      REDIS_URL: redis://redis:6379
+      JWT_ACCESS_SECRET: change-this-access-secret-before-deploying-123456
+      JWT_REFRESH_SECRET: change-this-refresh-secret-before-deploying-123456
+volumes:
+  educore-mongo:

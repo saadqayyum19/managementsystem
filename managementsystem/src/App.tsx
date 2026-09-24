@@ -1,0 +1,57 @@
+import { useState } from 'react'
+import { ArrowUpRight, BarChart3, Bell, BookOpen, Bus, CalendarDays, Check, ChevronDown, ChevronRight, CircleDollarSign, ClipboardCheck, Clock3, FileText, GraduationCap, LayoutDashboard, Library, MoreHorizontal, PanelLeftClose, Plus, Search, Settings2, ShieldCheck, Users } from 'lucide-react'
+import { BaseLayout } from './components/layout/BaseLayout'
+import './App.css'
+
+type Role = 'Principal' | 'Teacher' | 'Student' | 'Parent'
+type IconType = typeof LayoutDashboard
+
+const roles: Role[] = ['Principal', 'Teacher', 'Student', 'Parent']
+const roleCopy: Record<Role, { greeting: string; subtitle: string; name: string }> = {
+  Principal: { greeting: 'Good morning, Aisha', subtitle: "Here's what's happening across your institution today.", name: 'Aisha Rahman' },
+  Teacher: { greeting: 'Good morning, Marcus', subtitle: "Here's your classroom overview for today.", name: 'Marcus Lee' },
+  Student: { greeting: 'Good morning, Olivia', subtitle: "Stay on top of your learning journey today.", name: 'Olivia Chen' },
+  Parent: { greeting: 'Good morning, Daniel', subtitle: "A quick look at Maya's school day.", name: 'Daniel Chen' },
+}
+const moduleGroups: { label: string; items: { label: string; icon: IconType }[] }[] = [
+  { label: 'Workspace', items: [{ label: 'Overview', icon: LayoutDashboard }, { label: 'My calendar', icon: CalendarDays }] },
+  { label: 'Academics', items: [{ label: 'Attendance', icon: ClipboardCheck }, { label: 'Examinations', icon: FileText }, { label: 'Assignments', icon: BookOpen }, { label: 'Timetable', icon: Clock3 }] },
+  { label: 'Operations', items: [{ label: 'People', icon: Users }, { label: 'Library', icon: Library }, { label: 'Transport', icon: Bus }] },
+  { label: 'Insights', items: [{ label: 'Reports', icon: BarChart3 }, { label: 'Finance', icon: CircleDollarSign }] },
+]
+const stats = [
+  { label: 'Total students', value: '1,248', detail: '+8.2% from last term', tone: 'blue', icon: Users },
+  { label: 'Attendance rate', value: '94.6%', detail: '+2.4% this month', tone: 'green', icon: ClipboardCheck },
+  { label: 'Fee collection', value: '$82,490', detail: '78% of monthly target', tone: 'orange', icon: CircleDollarSign },
+  { label: 'Staff members', value: '86', detail: '4 pending approvals', tone: 'purple', icon: GraduationCap },
+]
+const attendance = [62, 74, 68, 82, 78, 88, 84, 92, 87, 95, 90, 94]
+
+function App() {
+  const [role, setRole] = useState<Role>('Principal')
+  const [activeItem, setActiveItem] = useState('Overview')
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true)
+  const [showRoleMenu, setShowRoleMenu] = useState(false)
+  const [showNotifications, setShowNotifications] = useState(false)
+  const copy = roleCopy[role]
+  return <BaseLayout><div className="app-shell">
+    <aside className={`sidebar ${isSidebarOpen ? '' : 'sidebar--collapsed'}`}>
+      <div className="brand-row"><div className="brand-mark"><GraduationCap size={20} strokeWidth={2.5} /></div>{isSidebarOpen && <span className="brand-name">EduCore <span>OS</span></span>}<button className="icon-button sidebar-toggle" onClick={() => setIsSidebarOpen(!isSidebarOpen)} aria-label="Toggle sidebar"><PanelLeftClose size={17} /></button></div>
+      <div className="institution-switcher"><div className="institution-logo">WA</div>{isSidebarOpen && <div className="institution-copy"><strong>Westbridge Academy</strong><span>Institution admin</span></div>}{isSidebarOpen && <ChevronDown size={15} className="muted-icon" />}</div>
+      <nav className="sidebar-nav" aria-label="Primary navigation">{moduleGroups.map((group) => <div className="nav-group" key={group.label}>{isSidebarOpen && <div className="nav-group-label">{group.label}</div>}{group.items.map(({ label, icon: Icon }) => <button key={label} className={`nav-item ${activeItem === label ? 'nav-item--active' : ''}`} onClick={() => setActiveItem(label)} title={!isSidebarOpen ? label : undefined}><Icon size={18} strokeWidth={activeItem === label ? 2.4 : 1.8} />{isSidebarOpen && <span>{label}</span>}{label === 'Attendance' && isSidebarOpen && <span className="nav-badge">3</span>}</button>)}</div>)}</nav>
+      <div className="sidebar-bottom"><button className="nav-item" title={!isSidebarOpen ? 'Settings' : undefined}><Settings2 size={18} /><span>{isSidebarOpen && 'Settings'}</span></button>{isSidebarOpen && <div className="sidebar-help"><div className="help-icon"><ShieldCheck size={16} /></div><div><strong>Need a hand?</strong><span>Visit the help center</span></div></div>}</div>
+    </aside>
+    <main className="main-content">
+      <header className="topbar"><div className="breadcrumbs"><span>Workspace</span><ChevronRight size={14} /><strong>{activeItem}</strong></div><div className="topbar-actions"><div className="search-box"><Search size={16} /><input placeholder="Search anything..." aria-label="Search" /><kbd>⌘ K</kbd></div><div className="header-divider" /><div className="popover-wrap"><button className="icon-button notification-button" onClick={() => setShowNotifications(!showNotifications)} aria-label="Notifications"><Bell size={19} /><span className="notification-dot" /></button>{showNotifications && <div className="popover notification-popover"><div className="popover-heading"><strong>Notifications</strong><span>3 new</span></div><div className="notification-item"><div className="avatar avatar--green">JM</div><p><strong>Jordan Miller</strong> submitted a leave request<small>12 minutes ago</small></p></div><div className="notification-item"><div className="avatar avatar--orange">AC</div><p>Attendance dropped below 90% in <strong>Grade 8B</strong><small>1 hour ago</small></p></div><button className="text-button">View all notifications <ArrowUpRight size={14} /></button></div>}</div><div className="profile-wrap popover-wrap"><button className="profile-button" onClick={() => setShowRoleMenu(!showRoleMenu)}><div className="avatar avatar--blue">{copy.name.split(' ').map((word) => word[0]).join('')}</div><div className="profile-text"><strong>{copy.name}</strong><span>{role}</span></div><ChevronDown size={15} /></button>{showRoleMenu && <div className="popover profile-popover"><strong>Switch workspace role</strong>{roles.map((option) => <button key={option} className={option === role ? 'role-option role-option--active' : 'role-option'} onClick={() => { setRole(option); setShowRoleMenu(false) }}>{option}{option === role && <Check size={15} />}</button>)}</div>}</div></div></header>
+      <div className="page-content"><section className="page-heading"><div><p className="eyebrow">Wednesday, September 24, 2025</p><h1>{copy.greeting}</h1><p className="page-subtitle">{copy.subtitle}</p></div><div className="heading-actions"><button className="secondary-button"><CalendarDays size={16} /> This week <ChevronDown size={14} /></button><button className="primary-button"><Plus size={17} /> Add new</button></div></section>
+        <section className="stat-grid" aria-label="Institution overview">{stats.map(({ label, value, detail, tone, icon: Icon }) => <div className="stat-card" key={label}><div className={`stat-icon stat-icon--${tone}`}><Icon size={18} /></div><div className="stat-label">{label}<MoreHorizontal size={17} /></div><div className="stat-value">{value}</div><div className="stat-detail"><span className={`trend trend--${tone}`}><ArrowUpRight size={13} /> {detail.split(' ')[0]}</span> {detail.substring(detail.indexOf(' ') + 1)}</div></div>)}</section>
+        <section className="content-grid"><div className="panel attendance-panel"><div className="panel-heading"><div><h2>Attendance overview</h2><p>Average attendance across all classes</p></div><button className="more-button">Last 12 months <ChevronDown size={14} /></button></div><div className="chart-wrap"><div className="chart-y-labels"><span>100%</span><span>75%</span><span>50%</span><span>25%</span><span>0%</span></div><div className="chart-area"><div className="chart-grid-lines"><i /><i /><i /><i /><i /></div><div className="chart-bars">{attendance.map((height, index) => <div className="bar-column" key={index}><div className={`chart-bar ${index === attendance.length - 1 ? 'chart-bar--current' : ''}`} style={{ height: `${height}%` }}><span>{height}%</span></div><small>{['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'][index]}</small></div>)}</div></div></div></div><div className="panel activity-panel"><div className="panel-heading"><div><h2>Recent activity</h2><p>Latest updates from your campus</p></div><button className="text-button">See all <ArrowUpRight size={14} /></button></div><div className="activity-list"><ActivityItem avatar="JM" tone="green" title="Jordan Miller" action="approved a leave request" time="12 min ago" /><ActivityItem avatar="PS" tone="blue" title="Priya Shah" action="added marks for Grade 10A" time="34 min ago" /><ActivityItem avatar="RB" tone="orange" title="Ravi Banerjee" action="created a new assignment" time="1 hr ago" /><ActivityItem avatar="WA" tone="purple" title="Westbridge Academy" action="published an announcement" time="2 hrs ago" /></div></div></section>
+        <section className="lower-grid"><div className="panel schedule-panel"><div className="panel-heading"><div><h2>Today&apos;s schedule</h2><p>Wednesday, September 24</p></div><button className="text-button">Full calendar <ArrowUpRight size={14} /></button></div><div className="schedule-list"><ScheduleItem time="08:30" end="09:20" title="Mathematics · Grade 10A" tag="Room 204" color="blue" /><ScheduleItem time="10:00" end="10:50" title="Staff sync · Academic block" tag="Conference room" color="purple" /><ScheduleItem time="11:30" end="12:20" title="Science · Grade 8B" tag="Lab 02" color="green" /></div></div><div className="panel tasks-panel"><div className="panel-heading"><div><h2>Tasks to review</h2><p>Keep your school moving forward</p></div><span className="task-count">4 open</span></div><div className="task-list"><Task title="Approve 3 pending leave requests" meta="Operations · Due today" done={false} /><Task title="Review Grade 10 examination results" meta="Academics · Due tomorrow" done={false} /><Task title="Update transport route details" meta="Operations · Due Sep 26" done={true} /></div><button className="add-task"><Plus size={15} /> Add a task</button></div></section>
+      </div>
+    </main>
+  </div></BaseLayout>
+}
+function ActivityItem({ avatar, tone, title, action, time }: { avatar: string; tone: string; title: string; action: string; time: string }) { return <div className="activity-item"><div className={`avatar avatar--${tone}`}>{avatar}</div><p><strong>{title}</strong> {action}<small>{time}</small></p><button className="icon-button"><MoreHorizontal size={17} /></button></div> }
+function ScheduleItem({ time, end, title, tag, color }: { time: string; end: string; title: string; tag: string; color: string }) { return <div className="schedule-item"><div className="schedule-time"><strong>{time}</strong><span>{end}</span></div><div className={`schedule-color schedule-color--${color}`} /><div className="schedule-details"><strong>{title}</strong><span>{tag}</span></div><ChevronRight size={16} className="muted-icon" /></div> }
+function Task({ title, meta, done }: { title: string; meta: string; done: boolean }) { return <div className="task-item"><button className={`task-check ${done ? 'task-check--done' : ''}`}><Check size={13} /></button><div><strong className={done ? 'task-done' : ''}>{title}</strong><span>{meta}</span></div></div> }
+export default App
