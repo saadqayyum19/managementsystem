@@ -47,6 +47,18 @@ const AnnouncementManagementPage = lazyPage(() => import('../features/communicat
 const EmailSmsTemplatesPage = lazyPage(() => import('../features/communication/EmailSmsTemplatesPage'), 'EmailSmsTemplatesPage')
 const InAppChatPage = lazyPage(() => import('../features/communication/InAppChatPage'), 'InAppChatPage')
 const NotificationEnginePage = lazyPage(() => import('../features/communication/NotificationEnginePage'), 'NotificationEnginePage')
+/* Phase 6 — analytics */
+const StudentPerformancePage = lazyPage(() => import('../features/analytics/StudentPerformancePage'), 'StudentPerformancePage')
+const AttendanceAnalyticsPage = lazyPage(() => import('../features/analytics/AttendanceAnalyticsPage'), 'AttendanceAnalyticsPage')
+const TeacherEffectivenessPage = lazyPage(() => import('../features/analytics/TeacherEffectivenessPage'), 'TeacherEffectivenessPage')
+const AtRiskDetectionPage = lazyPage(() => import('../features/analytics/AtRiskDetectionPage'), 'AtRiskDetectionPage')
+const CustomReportBuilderPage = lazyPage(() => import('../features/analytics/CustomReportBuilderPage'), 'CustomReportBuilderPage')
+/* Phase 7 — advanced / AI (feature-toggled off by default) */
+const AIChatbotPage = lazyPage(() => import('../features/advanced/AIChatbotPage'), 'AIChatbotPage')
+const FaceAttendancePage = lazyPage(() => import('../features/advanced/FaceAttendancePage'), 'FaceAttendancePage')
+const PlagiarismCheckerPage = lazyPage(() => import('../features/advanced/PlagiarismCheckerPage'), 'PlagiarismCheckerPage')
+const RecommendationEnginePage = lazyPage(() => import('../features/advanced/RecommendationEnginePage'), 'RecommendationEnginePage')
+const BehaviorTrackingPage = lazyPage(() => import('../features/advanced/BehaviorTrackingPage'), 'BehaviorTrackingPage')
 
 export const appRoutes: AppRoute[] = [
   { path: '/', element: <Phase0ShowcasePage />, roles: everyone },
@@ -77,4 +89,14 @@ export const appRoutes: AppRoute[] = [
   { path: '/communication/templates', element: <EmailSmsTemplatesPage />, roles: staff },
   { path: '/communication/chat', element: <InAppChatPage />, roles: everyone },
   { path: '/communication/notifications', element: <NotificationEnginePage />, roles: staff },
+  { path: '/analytics/performance', element: <StudentPerformancePage />, roles: everyone },
+  { path: '/analytics/attendance', element: <AttendanceAnalyticsPage />, roles: staff },
+  { path: '/analytics/teachers', element: <TeacherEffectivenessPage />, roles: leadership },
+  { path: '/analytics/at-risk', element: <AtRiskDetectionPage />, roles: staff },
+  { path: '/analytics/reports', element: <CustomReportBuilderPage />, roles: staff },
+  { path: '/advanced/chatbot', element: <AIChatbotPage />, roles: leadership },
+  { path: '/advanced/face-attendance', element: <FaceAttendancePage />, roles: leadership },
+  { path: '/advanced/plagiarism', element: <PlagiarismCheckerPage />, roles: leadership },
+  { path: '/advanced/recommendations', element: <RecommendationEnginePage />, roles: leadership },
+  { path: '/advanced/behavior', element: <BehaviorTrackingPage />, roles: leadership },
 ]
