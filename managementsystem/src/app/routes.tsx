@@ -17,6 +17,8 @@ const lazyPage = (loader: () => Promise<Record<string, unknown>>, name: string) 
 
 /* Phase 0 — throwaway component lab (mounted at / and /dev/ui until dashboards land in Phase 9) */
 const Phase0ShowcasePage = lazyPage(() => import('../features/dev/Phase0ShowcasePage'), 'Phase0ShowcasePage')
+/* Phase 9 — role dashboards (mounted at /) */
+const DashboardPage = lazyPage(() => import('../features/dashboards/DashboardPage'), 'DashboardPage')
 /* Phase 2 — academics */
 const AcademicStructurePage = lazyPage(() => import('../features/academics/AcademicStructureModule'), 'AcademicStructurePage')
 const TimetableBoardPage = lazyPage(() => import('../features/academics/TimetableBoardPage'), 'TimetableBoardPage')
@@ -59,9 +61,17 @@ const FaceAttendancePage = lazyPage(() => import('../features/advanced/FaceAtten
 const PlagiarismCheckerPage = lazyPage(() => import('../features/advanced/PlagiarismCheckerPage'), 'PlagiarismCheckerPage')
 const RecommendationEnginePage = lazyPage(() => import('../features/advanced/RecommendationEnginePage'), 'RecommendationEnginePage')
 const BehaviorTrackingPage = lazyPage(() => import('../features/advanced/BehaviorTrackingPage'), 'BehaviorTrackingPage')
+/* Phase 8 — system (super admin) + profile */
+const InstitutionSetupPage = lazyPage(() => import('../features/system/InstitutionSetupPage'), 'InstitutionSetupPage')
+const FeatureTogglesPage = lazyPage(() => import('../features/system/FeatureTogglesPage'), 'FeatureTogglesPage')
+const RolesPermissionsPage = lazyPage(() => import('../features/system/RolesPermissionsPage'), 'RolesPermissionsPage')
+const AuditLogsPage = lazyPage(() => import('../features/system/AuditLogsPage'), 'AuditLogsPage')
+const BackupAndRestorePage = lazyPage(() => import('../features/system/BackupRestorePage'), 'BackupAndRestorePage')
+const IdCardGeneratorPage = lazyPage(() => import('../features/system/IdCardGeneratorPage'), 'IdCardGeneratorPage')
+const MyProfilePage = lazyPage(() => import('../features/system/MyProfilePage'), 'MyProfilePage')
 
 export const appRoutes: AppRoute[] = [
-  { path: '/', element: <Phase0ShowcasePage />, roles: everyone },
+  { path: '/', element: <DashboardPage />, roles: everyone },
   { path: '/dev/ui', element: <Phase0ShowcasePage />, roles: everyone },
   { path: '/operations/teachers', element: <TeacherManagementPage />, roles: leadership },
   { path: '/operations/workspace', element: <TeacherWorkspacePage />, roles: ['super_admin', 'principal', 'teacher'] },
@@ -99,4 +109,11 @@ export const appRoutes: AppRoute[] = [
   { path: '/advanced/plagiarism', element: <PlagiarismCheckerPage />, roles: leadership },
   { path: '/advanced/recommendations', element: <RecommendationEnginePage />, roles: leadership },
   { path: '/advanced/behavior', element: <BehaviorTrackingPage />, roles: leadership },
+  { path: '/system/institution', element: <InstitutionSetupPage />, roles: ['super_admin'] },
+  { path: '/system/feature-toggles', element: <FeatureTogglesPage />, roles: ['super_admin'] },
+  { path: '/system/rbac', element: <RolesPermissionsPage />, roles: ['super_admin'] },
+  { path: '/system/audit', element: <AuditLogsPage />, roles: ['super_admin'] },
+  { path: '/system/backup', element: <BackupAndRestorePage />, roles: ['super_admin'] },
+  { path: '/system/id-cards', element: <IdCardGeneratorPage />, roles: ['super_admin'] },
+  { path: '/system/profiles', element: <MyProfilePage />, roles: everyone },
 ]
